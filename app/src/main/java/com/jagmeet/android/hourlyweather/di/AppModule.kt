@@ -1,0 +1,50 @@
+package com.jagmeet.android.hourlyweather.di
+
+import com.jagmeet.android.hourlyweather.datasource.network.UrlProvider
+import com.jagmeet.android.hourlyweather.datasource.network.citylookup.CityLookupService
+import com.jagmeet.android.hourlyweather.datasource.network.weather.WeatherService
+import com.techyourchance.dagger2course.common.dependnecyinjection.RetroFitCityLookup
+import com.techyourchance.dagger2course.common.dependnecyinjection.RetrofitHourlyWeather
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+class AppModule {
+    @Provides
+    @Singleton
+    @RetrofitHourlyWeather
+    fun weatherServiceApi(urlProvider: UrlProvider): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(urlProvider.getWeatherUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @RetroFitCityLookup
+    fun cityLookupServiceApi(urlProvider: UrlProvider): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(urlProvider.getGeocodingUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun urlProvider() = UrlProvider()
+
+    @Provides
+    @Singleton
+    fun weatherApi(@RetrofitHourlyWeather retrofit: Retrofit): WeatherService = retrofit.create(WeatherService::class.java)
+
+    @Provides
+    @Singleton
+    fun cityLookupApi(@RetroFitCityLookup retrofit: Retrofit): CityLookupService = retrofit.create(CityLookupService::class.java)
+}

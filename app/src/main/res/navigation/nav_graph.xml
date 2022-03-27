@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/lookupFragment">
+
+    <fragment
+        android:id="@+id/weatherListFragment"
+        android:name="com.jagmeet.android.hourlyweather.ui.weather.weatherlist.WeatherListFragment"
+        android:label="WeatherListFragment" >
+        <action
+            android:id="@+id/action_weatherListFragment_to_weatherDetailFragment"
+            app:destination="@id/weatherDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lookupFragment"
+        android:name="com.jagmeet.android.hourlyweather.ui.weather.lookup.LookUpFragment"
+        android:label="LookUpFragment" >
+        <action
+            android:id="@+id/action_lookupFragment_to_weatherListFragment"
+            app:destination="@id/weatherListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherDetailFragment"
+        android:name="com.jagmeet.android.hourlyweather.ui.weather.weatherdetail.WeatherDetailFragment"
+        android:label="WeatherDetailFragment" />
+</navigation>
