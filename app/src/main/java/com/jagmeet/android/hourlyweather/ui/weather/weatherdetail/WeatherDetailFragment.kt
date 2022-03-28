@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentLookUpBinding
 import com.jagmeet.android.hourlyweather.databinding.FragmetWeatherDetailBinding
@@ -29,12 +30,21 @@ class WeatherDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmetWeatherDetailBinding.inflate(layoutInflater)
+        binding.myToolbar.setupWithNavController(findNavController())
+        viewModel.cityLookUpState.observe(viewLifecycleOwner) {
+            binding.myToolbar.title = it.cityDetail?.name
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.selectedWeatherData.observe(viewLifecycleOwner) { hourlyData ->
+            binding.txtTemp.text = hourlyData.temp.toString()
+            binding.txtFeelsLike.text = hourlyData.feels_like.toString()
+            binding.txtDesc.text = hourlyData.weather[0].description
+            binding.txtMain.text = hourlyData.weather[0].main
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentWeatherListBinding
@@ -26,6 +27,8 @@ class WeatherListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(savedInstanceState==null)
+        viewModel.getHourlyWeather()
     }
 
     override fun onCreateView(
@@ -33,25 +36,30 @@ class WeatherListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWeatherListBinding.inflate(layoutInflater)
-       // Log.d("jagmeetnir", "object ${viewModel}")
-     //  Log.d("jagmeetnir"," "+ arguments?.getDouble("lat"))
-     //  arguments?.getString("city")?.let { getWeather(it) }
-        viewModel.getHourlyWeather()
+        // Log.d("jagmeetnir", "object ${viewModel}")
+        //  Log.d("jagmeetnir"," "+ arguments?.getDouble("lat"))
+        //  arguments?.getString("city")?.let { getWeather(it) }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        binding.myToolbar.setupWithNavController(findNavController())
+
         viewModel.hourlyWeatherData.observe(viewLifecycleOwner) {
             adapter.submitList(it.hourly)
         }
-        viewModel.getHourlyWeather();
+        viewModel.cityLookUpState.observe(viewLifecycleOwner) {
+            binding.myToolbar.title = it.cityDetail?.name
+        }
     }
 
     private fun initRecyclerView() {
         adapter = HourlyWeatherAdapter(object : Interaction {
             override fun onItemSelected(position: Int, item: HourlyData) {
+                viewModel.setSelectedData(item)
                 findNavController().navigate(R.id.action_weatherListFragment_to_weatherDetailFragment)
             }
         })

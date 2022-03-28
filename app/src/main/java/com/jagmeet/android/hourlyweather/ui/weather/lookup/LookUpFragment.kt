@@ -33,18 +33,26 @@ class LookUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel.cityLookUpState.observe(viewLifecycleOwner) { state ->
+            if (state.isLookUpSuccess) {
+                viewModel.navigateFromLookUp()
+                findNavController()
+                    .navigate(R.id.action_lookupFragment_to_weatherListFragment)
+            }
+
+            state.userMessages?.firstOrNull()?.let {
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                viewModel.messageShown(it.id)
+            }
+            binding.lookupEditTxt.setText("london")
+        }
+
+
         binding.btnLookup.setOnClickListener {
             val city = binding.lookupEditTxt.text.toString()
             Log.d("jagmeetnir", " city " + city)
-
-            viewModel.cityLookUpState.observe(viewLifecycleOwner) { state ->
-                if (state.isLookUpSuccess)
-                    findNavController().navigate(R.id.action_lookupFragment_to_weatherListFragment)
-                state.userMessages?.firstOrNull()?.let {
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                    viewModel.messageShown(it.id)
-                }
-            }
             viewModel.getCityDetail(city)
         }
     }
