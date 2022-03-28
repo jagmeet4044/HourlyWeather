@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -30,10 +33,10 @@ class WeatherListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var cityDetail = arguments?.getParcelable<CityDetail>("cityInfo")
-
-        cityDetail?.let {
-            hourlyWeatherViewModel.getHourlyWeather(cityDetail)
-        }
+        if (savedInstanceState == null)
+            cityDetail?.let {
+                hourlyWeatherViewModel.getHourlyWeather(cityDetail)
+            }
     }
 
     override fun onCreateView(
@@ -48,9 +51,19 @@ class WeatherListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         binding.myToolbar.setupWithNavController(findNavController())
-        hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) {
-            adapter.submitList(it.hourlyWeatherDataList)
-            binding.myToolbar.title = it.cityDetail?.name
+        hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) { state ->
+            adapter.submitList(state.hourlyWeatherDataList)
+            binding.myToolbar.title = state.cityDetail?.name
+
+            when (state.isLoading) {
+                true -> binding.progressBar.visibility = VISIBLE
+                false -> binding.progressBar.visibility = GONE
+            }
+
+            state.errorMessages?.firstOrNull()?.let {
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                hourlyWeatherViewModel.messageShown(it.id)
+            }
 
         }
     }

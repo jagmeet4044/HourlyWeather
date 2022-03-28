@@ -26,7 +26,6 @@ class HourlyWeatherViewModel @Inject constructor(
 
 
     fun getHourlyWeather(cityDetail: CityDetail) {
-
         _hourlyWeatherState.postValue(
             _hourlyWeatherState.value?.copy(
                 cityDetail = cityDetail,
@@ -34,7 +33,7 @@ class HourlyWeatherViewModel @Inject constructor(
             )
         )
 
-        Timber.d(" Timber getHourlyWeather viewmodel")
+        Timber.d(" Timber22 getHourlyWeather viewmodel")
         viewModelScope.launch {
             var weatherResult = weatherRepository.getHourlyForecast(cityDetail.lat, cityDetail.lon)
             when (weatherResult) {
@@ -72,7 +71,7 @@ class HourlyWeatherViewModel @Inject constructor(
         _hourlyWeatherState.postValue(
             _hourlyWeatherState.value?.copy(
                 selectedWeatherData = hourlyData,
-                isLoading = true
+                isLoading = false
             )
         )
     }

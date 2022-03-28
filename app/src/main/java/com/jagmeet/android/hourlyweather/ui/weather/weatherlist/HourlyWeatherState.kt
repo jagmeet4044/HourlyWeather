@@ -2,7 +2,6 @@ package com.jagmeet.android.hourlyweather.ui.weather.weatherlist
 
 import com.jagmeet.android.hourlyweather.model.CityDetail
 import com.jagmeet.android.hourlyweather.model.HourlyData
-import com.jagmeet.android.hourlyweather.model.HourlyWeatherData
 
 data class HourlyWeatherState(
     val isLoading: Boolean = false,

@@ -42,9 +42,11 @@ class WeatherDetailFragment : Fragment() {
         hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) { state ->
             binding.txtTemp.text = state.selectedWeatherData?.temp.toString()
             binding.myToolbar.title = state.cityDetail?.name
-            binding.txtFeelsLike.text = state.selectedWeatherData?.feels_like.toString()
-            binding.txtDesc.text = state.selectedWeatherData?.weather?.get(0)?.description ?: ""
-            binding.txtMain.text = state.selectedWeatherData?.weather?.get(0)?.main ?: ""
+
+            val weatherState =  state.selectedWeatherData
+            binding.txtFeelsLike.text =weatherState?.feels_like.toString()
+            binding.txtDesc.text = weatherState?.weather?.get(0)?.description ?: ""
+            binding.txtMain.text = weatherState?.weather?.get(0)?.main ?: ""
         }
     }
 
