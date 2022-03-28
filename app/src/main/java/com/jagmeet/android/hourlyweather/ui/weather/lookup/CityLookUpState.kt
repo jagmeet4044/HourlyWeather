@@ -5,7 +5,7 @@ import com.jagmeet.android.hourlyweather.model.CityDetail
 data class CityLookUpState(
     val isLoading: Boolean = false,
     val isLookUpSuccess: Boolean = false,
-    val userMessages: List<Message>? = emptyList(),
+    val errorMessages: List<Message>? = emptyList(),
     val cityDetail: CityDetail?
 )
 

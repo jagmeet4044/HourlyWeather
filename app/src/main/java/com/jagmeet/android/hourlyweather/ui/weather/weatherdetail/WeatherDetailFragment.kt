@@ -14,13 +14,13 @@ import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentLookUpBinding
 import com.jagmeet.android.hourlyweather.databinding.FragmetWeatherDetailBinding
 import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherViewModel
+import com.jagmeet.android.hourlyweather.ui.weather.lookup.CityLookupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WeatherDetailFragment : Fragment() {
     private lateinit var binding: FragmetWeatherDetailBinding
-    private val viewModel: HourlyWeatherViewModel by activityViewModels()
-
+    private val hourlyWeatherViewModel: HourlyWeatherViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -31,19 +31,20 @@ class WeatherDetailFragment : Fragment() {
     ): View? {
         binding = FragmetWeatherDetailBinding.inflate(layoutInflater)
         binding.myToolbar.setupWithNavController(findNavController())
-        viewModel.cityLookUpState.observe(viewLifecycleOwner) {
-            binding.myToolbar.title = it.cityDetail?.name
+        hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) {
+
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.selectedWeatherData.observe(viewLifecycleOwner) { hourlyData ->
-            binding.txtTemp.text = hourlyData.temp.toString()
-            binding.txtFeelsLike.text = hourlyData.feels_like.toString()
-            binding.txtDesc.text = hourlyData.weather[0].description
-            binding.txtMain.text = hourlyData.weather[0].main
+        hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) { state ->
+            binding.txtTemp.text = state.selectedWeatherData?.temp.toString()
+            binding.myToolbar.title = state.cityDetail?.name
+            binding.txtFeelsLike.text = state.selectedWeatherData?.feels_like.toString()
+            binding.txtDesc.text = state.selectedWeatherData?.weather?.get(0)?.description ?: ""
+            binding.txtMain.text = state.selectedWeatherData?.weather?.get(0)?.main ?: ""
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentLookUpBinding
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LookUpFragment : Fragment() {
     private lateinit var binding: FragmentLookUpBinding
-    private val viewModel: HourlyWeatherViewModel by activityViewModels()
+    private val viewModel: CityLookupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,17 +39,18 @@ class LookUpFragment : Fragment() {
         viewModel.cityLookUpState.observe(viewLifecycleOwner) { state ->
             if (state.isLookUpSuccess) {
                 viewModel.navigateFromLookUp()
+                var b: Bundle = Bundle()
+                b.putParcelable("cityInfo", state.cityDetail)
                 findNavController()
-                    .navigate(R.id.action_lookupFragment_to_weatherListFragment)
+                    .navigate(R.id.action_lookupFragment_to_weatherListFragment, b)
             }
 
-            state.userMessages?.firstOrNull()?.let {
+            state.errorMessages?.firstOrNull()?.let {
                 Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 viewModel.messageShown(it.id)
             }
             binding.lookupEditTxt.setText("london")
         }
-
 
         binding.btnLookup.setOnClickListener {
             val city = binding.lookupEditTxt.text.toString()

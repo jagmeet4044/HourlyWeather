@@ -12,23 +12,28 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentWeatherListBinding
+import com.jagmeet.android.hourlyweather.model.CityDetail
 import com.jagmeet.android.hourlyweather.model.HourlyData
 import com.jagmeet.android.hourlyweather.model.HourlyWeatherData
 import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherAdapter
 import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherViewModel
 import com.jagmeet.android.hourlyweather.ui.weather.Interaction
+import com.jagmeet.android.hourlyweather.ui.weather.lookup.CityLookupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WeatherListFragment : Fragment() {
     private lateinit var adapter: HourlyWeatherAdapter
     private lateinit var binding: FragmentWeatherListBinding
-    private val viewModel: HourlyWeatherViewModel by activityViewModels()
+    private val hourlyWeatherViewModel: HourlyWeatherViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(savedInstanceState==null)
-        viewModel.getHourlyWeather()
+        var cityDetail = arguments?.getParcelable<CityDetail>("cityInfo")
+
+        cityDetail?.let {
+            hourlyWeatherViewModel.getHourlyWeather(cityDetail)
+        }
     }
 
     override fun onCreateView(
@@ -36,10 +41,6 @@ class WeatherListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWeatherListBinding.inflate(layoutInflater)
-        // Log.d("jagmeetnir", "object ${viewModel}")
-        //  Log.d("jagmeetnir"," "+ arguments?.getDouble("lat"))
-        //  arguments?.getString("city")?.let { getWeather(it) }
-
         return binding.root
     }
 
@@ -47,19 +48,17 @@ class WeatherListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         binding.myToolbar.setupWithNavController(findNavController())
-
-        viewModel.hourlyWeatherData.observe(viewLifecycleOwner) {
-            adapter.submitList(it.hourly)
-        }
-        viewModel.cityLookUpState.observe(viewLifecycleOwner) {
+        hourlyWeatherViewModel.hourlyWeatherState.observe(viewLifecycleOwner) {
+            adapter.submitList(it.hourlyWeatherDataList)
             binding.myToolbar.title = it.cityDetail?.name
+
         }
     }
 
     private fun initRecyclerView() {
         adapter = HourlyWeatherAdapter(object : Interaction {
             override fun onItemSelected(position: Int, item: HourlyData) {
-                viewModel.setSelectedData(item)
+                hourlyWeatherViewModel.setWeatherData(item)
                 findNavController().navigate(R.id.action_weatherListFragment_to_weatherDetailFragment)
             }
         })
