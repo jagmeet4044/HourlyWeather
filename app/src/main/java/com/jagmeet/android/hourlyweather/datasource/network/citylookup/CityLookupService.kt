@@ -9,7 +9,6 @@ interface CityLookupService {
     @GET("direct")
     suspend fun getCityDetail(
         @Query("q") city: String,
-        @Query("appid") appId: String =  Constants.API_KEY,
     ): CityLookupResponse
 
 }

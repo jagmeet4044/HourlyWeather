@@ -1,5 +1,6 @@
 package com.jagmeet.android.hourlyweather.di
 
+import com.jagmeet.android.hourlyweather.datasource.network.RequestInterceptor
 import com.jagmeet.android.hourlyweather.datasource.network.UrlProvider
 import com.jagmeet.android.hourlyweather.datasource.network.citylookup.CityLookupService
 import com.jagmeet.android.hourlyweather.datasource.network.weather.WeatherService
@@ -9,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -23,7 +25,14 @@ class AppModule {
         return Retrofit.Builder()
             .baseUrl(urlProvider.getWeatherUrl())
             .addConverterFactory(GsonConverterFactory.create())
+            .client(getOkHttpClient())
             .build()
+    }
+
+    private fun getOkHttpClient(): OkHttpClient {
+        val client = OkHttpClient.Builder()
+        client.addInterceptor(RequestInterceptor())
+        return client.build()
     }
 
     @Provides
@@ -32,6 +41,7 @@ class AppModule {
     fun cityLookupServiceApi(urlProvider: UrlProvider): Retrofit {
         return Retrofit.Builder()
             .baseUrl(urlProvider.getGeocodingUrl())
+            .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
