@@ -36,12 +36,12 @@ class WeatherRepository @Inject constructor(
             safeApiCall(Dispatchers.IO) { cityLookupService.getCityDetail(city) }) {
             is ResultWrapper.Success -> {
                 if (response.value.isEmpty())
-                    ResultData.Error("invalid city name")
+                    ResultData.Error("Invalid city name") //to be changed to refer from string.xml
                 else
                     ResultData.Success(response.value[0].toCityDetail())
             }
             is ResultWrapper.NetworkError ->
-                ResultData.Error("network issue")
+                ResultData.Error("Network issue")
             is ResultWrapper.GenericError ->
                 ResultData.Error(response.error)
         }
