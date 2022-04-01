@@ -1,4 +1,4 @@
-# <b>openWeather</b>
+# <b>Hourly Weather</b>
 A simple android app to fetch Hourly weather of specified City. This app demonstrates MVVM Architecture with Unidirectional data flow.
 
 
