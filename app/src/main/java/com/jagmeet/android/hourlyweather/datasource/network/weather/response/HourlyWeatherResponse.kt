@@ -1,5 +1,6 @@
 package com.jagmeet.android.hourlyweather.datasource.network.weather.response
 
+import com.jagmeet.android.hourlyweather.Utils.Companion.getTime
 import com.jagmeet.android.hourlyweather.model.HourlyData
 import com.jagmeet.android.hourlyweather.model.HourlyWeatherData
 import com.jagmeet.android.hourlyweather.model.WeatherData
@@ -28,6 +29,7 @@ private fun List<Hourly>.toHourlyData(): List<HourlyData> {
     for (hourly in this) {
         hourlyDataList.add(
             HourlyData(
+                dt = getTime(hourly.dt),
                 clouds = hourly.clouds,
                 weather = hourly.weather.toWeatherData(),
                 feels_like = hourly.feels_like,

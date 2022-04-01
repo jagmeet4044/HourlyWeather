@@ -11,6 +11,7 @@ class RequestInterceptor:Interceptor {
 
         val url = originalHttpUrl.newBuilder()
             .addQueryParameter("appid", Constants.API_KEY)
+            .addQueryParameter("units","metric")
             .build()
 
         val request = originalRequest.newBuilder().url(url).build()

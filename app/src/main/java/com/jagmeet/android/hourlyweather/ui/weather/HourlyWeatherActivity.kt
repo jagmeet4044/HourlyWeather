@@ -16,21 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HourlyWeatherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHourlyWeatherBinding
-    private val viewModel: HourlyWeatherViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHourlyWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // setSupportActionBar(binding.myToolbar)
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
-//        val navController = navHostFragment.navController
-//        binding.myToolbar.setupWithNavController(navController)
-//        Log.d("jagmeetnir", "object ${viewModel}")
-//        viewModel.cityLookUpState.observe(this) { state ->
-//                binding.myToolbar.title = state.cityDetail?.name
-//        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -38,12 +28,5 @@ class HourlyWeatherActivity : AppCompatActivity() {
         outState.putString("test", "test")
 
     }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        Toast.makeText(this, "dhskdsd", Toast.LENGTH_LONG).show()
-//        val navController = findNavController(R.id.fragment_container_view)
-//        return navController.navigateUp() || super.onSupportNavigateUp()
-//    }
-
 
 }

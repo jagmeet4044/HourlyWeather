@@ -2,9 +2,11 @@ package com.jagmeet.android.hourlyweather.ui.weather
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.jagmeet.android.hourlyweather.databinding.WeatherDataItemBinding
 import com.jagmeet.android.hourlyweather.model.HourlyData
 import com.jagmeet.android.hourlyweather.model.HourlyWeatherData
@@ -34,12 +36,20 @@ class DiffUtilCallback : DiffUtil.ItemCallback<HourlyData>() {
 }
 
 
-class WeatherViewHolder(private val binding: WeatherDataItemBinding, private val interaction: Interaction?) :
+class WeatherViewHolder(
+    private val binding: WeatherDataItemBinding,
+    private val interaction: Interaction?
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(hourlyData: HourlyData) {
-        binding.txtMain.text = hourlyData.weather[0].main
-        binding.txtDescription.text = hourlyData.temp.toString()
+        // hardcoding of °C to be changed
+        binding.txtMain.text = "${hourlyData.temp.toInt()}°C"
+        binding.txtDescription.text = hourlyData.weather[0].main
+        binding.txtTime.text = hourlyData.dt
+        Glide.with(binding.root.context)
+            .load("https://openweathermap.org/img/wn/${hourlyData.weather[0].icon}@2x.png")
+            .into(binding.imageView)
         itemView.setOnClickListener {
             interaction?.onItemSelected(adapterPosition, hourlyData)
         }

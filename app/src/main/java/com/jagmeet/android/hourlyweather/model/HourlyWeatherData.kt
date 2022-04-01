@@ -11,7 +11,7 @@ data class HourlyWeatherData(
 data class HourlyData(
     val clouds: Double = 0.0,
     val dew_point: Double = 0.0,
-    val dt: Int = 0,
+    val dt: String = "",
     val feels_like: Double,
     val humidity: Int = 0,
     val pop: Int = 0,
