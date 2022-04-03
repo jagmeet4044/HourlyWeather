@@ -1,4 +1,4 @@
-package com.jagmeet.android.hourlyweather.ui.weather
+package com.jagmeet.android.hourlyweather.ui.weather.weatherlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
