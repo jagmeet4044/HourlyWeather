@@ -1,7 +1,6 @@
 package com.jagmeet.android.hourlyweather.ui.weather.weatherlist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,11 +16,7 @@ import com.jagmeet.android.hourlyweather.R
 import com.jagmeet.android.hourlyweather.databinding.FragmentWeatherListBinding
 import com.jagmeet.android.hourlyweather.model.CityDetail
 import com.jagmeet.android.hourlyweather.model.HourlyData
-import com.jagmeet.android.hourlyweather.model.HourlyWeatherData
-import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherAdapter
 import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherViewModel
-import com.jagmeet.android.hourlyweather.ui.weather.Interaction
-import com.jagmeet.android.hourlyweather.ui.weather.lookup.CityLookupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

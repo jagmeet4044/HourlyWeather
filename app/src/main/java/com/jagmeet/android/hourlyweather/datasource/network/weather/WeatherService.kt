@@ -1,6 +1,5 @@
 package com.jagmeet.android.hourlyweather.datasource.network.weather
 
-import com.jagmeet.android.hourlyweather.Constants
 import com.jagmeet.android.hourlyweather.datasource.network.weather.response.HourlyWeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query

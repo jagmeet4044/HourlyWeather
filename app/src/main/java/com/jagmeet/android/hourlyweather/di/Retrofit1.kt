@@ -1,4 +1,4 @@
-package com.techyourchance.dagger2course.common.dependnecyinjection
+package com.jagmeet.android.hourlyweather.di
 
 import javax.inject.Qualifier
 

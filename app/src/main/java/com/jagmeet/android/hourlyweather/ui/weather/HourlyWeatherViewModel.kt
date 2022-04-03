@@ -3,7 +3,7 @@ package com.jagmeet.android.hourlyweather.ui.weather
 
 import androidx.lifecycle.*
 import com.jagmeet.android.hourlyweather.ResultData
-import com.jagmeet.android.hourlyweather.datasource.WeatherRepository
+import com.jagmeet.android.hourlyweather.datasource.network.weather.WeatherRepository
 import com.jagmeet.android.hourlyweather.model.CityDetail
 import com.jagmeet.android.hourlyweather.model.HourlyData
 import com.jagmeet.android.hourlyweather.ui.weather.weatherlist.HourlyWeatherState
@@ -33,7 +33,7 @@ class HourlyWeatherViewModel @Inject constructor(
             )
         )
 
-        Timber.d(" Timber22 getHourlyWeather viewmodel")
+        Timber.d(" getHourlyWeather viewmodel")
         viewModelScope.launch {
             var weatherResult = weatherRepository.getHourlyForecast(cityDetail.lat, cityDetail.lon)
             when (weatherResult) {
@@ -50,7 +50,7 @@ class HourlyWeatherViewModel @Inject constructor(
                     messages?.add(Message(Random(10).nextLong(), weatherResult.error))
                     _hourlyWeatherState.postValue(
                         _hourlyWeatherState.value?.copy(
-                            errorMessages = messages,
+                            errorMessages = messages.orEmpty(),
                             isLoading = false
                         )
                     )
@@ -64,7 +64,10 @@ class HourlyWeatherViewModel @Inject constructor(
     fun messageShown(messageId: Long) {
         val messages =
             _hourlyWeatherState.value?.errorMessages?.filterNot { it.id == messageId }
-        _hourlyWeatherState.value = _hourlyWeatherState.value?.copy(errorMessages = messages)
+        _hourlyWeatherState.value =
+            _hourlyWeatherState.value?.copy(
+                errorMessages = messages.orEmpty()
+            )
     }
 
     fun setWeatherData(hourlyData: HourlyData) {

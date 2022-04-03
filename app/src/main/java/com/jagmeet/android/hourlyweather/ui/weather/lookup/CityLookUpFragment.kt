@@ -1,24 +1,21 @@
 package com.jagmeet.android.hourlyweather.ui.weather.lookup
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.jagmeet.android.hourlyweather.R
-import com.jagmeet.android.hourlyweather.databinding.FragmentLookUpBinding
-import com.jagmeet.android.hourlyweather.ui.weather.HourlyWeatherViewModel
+import com.jagmeet.android.hourlyweather.databinding.FragmentCityLookUpBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
-class LookUpFragment : Fragment() {
-    private lateinit var binding: FragmentLookUpBinding
+class CityLookUpFragment : Fragment() {
+    private lateinit var binding: FragmentCityLookUpBinding
     private val viewModel: CityLookupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +26,7 @@ class LookUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLookUpBinding.inflate(layoutInflater)
+        binding = FragmentCityLookUpBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -43,11 +40,13 @@ class LookUpFragment : Fragment() {
                 var b: Bundle = Bundle()
                 b.putParcelable("cityInfo", state.cityDetail)
                 findNavController()
-                    .navigate(R.id.action_lookupFragment_to_weatherListFragment, b)
+                    .navigate(R.id.action_lookupFragment_to_weatherListFragment, Bundle().apply {
+                        putParcelable("cityInfo", state.cityDetail)
+                    })
             }
 
             state.errorMessages?.firstOrNull()?.let {
-                Snackbar.make(binding.root,it.message, Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.root, it.message, Snackbar.LENGTH_SHORT)
                     .show()
                 viewModel.messageShown(it.id)
             }
@@ -55,7 +54,7 @@ class LookUpFragment : Fragment() {
 
         binding.btnLookup.setOnClickListener {
             val city = binding.lookupEditTxt.text.toString()
-            Log.d("jagmeetnir", " city " + city)
+            Timber.d("city $city")
             viewModel.getCityDetail(city)
         }
     }

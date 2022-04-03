@@ -8,7 +8,7 @@ data class HourlyWeatherState(
     val hourlyWeatherDataList: List<HourlyData> = emptyList(),
     val cityDetail: CityDetail? = null,
     val selectedWeatherData: HourlyData? = null,
-    val errorMessages: List<Message>? = emptyList(),
+    val errorMessages: List<Message> = emptyList(),
 )
 
 data class Message(val id: Long, val message: String?)
